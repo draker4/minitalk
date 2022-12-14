@@ -4,31 +4,37 @@
 
 # ---- Final Executable --- #
 
-NAME_SERVER		=	server
+NAME_SERVER	=	server
 
-NAME_CLIENT		=	client
+NAME_CLIENT	=	client
 
-LIBFT			=	libft.a
+LIBFT		=	libft.a
 
 # ---- Directories ---- #
 
-DIR_OBJS		=	.objs/
+DIR_OBJS	=	.objs/
 
-DIR_SRCS_SERVER	=	srcs_server/
+DIR_SRCS	=	srcs/
 
-DIR_SRCS_CLIENT	=	srcs_client/
+DIR_LIBFT	=	libft/
 
-DIR_LIBFT		=	libft/
-
-DIR_HEAD		=	head/
+DIR_HEAD	=	head/
 
 # ---- Files ---- #
 
 HEAD		=	minitalk.h
 
-SRCS		=	main.c
+COMMON_SRCS	=	ft_msg_error.c	ft_utils.c
 
-OBJS		=	${SRCS:%.c=${DIR_OBJS}%.o}
+SRCS_SERVER	=	server.c
+
+SRCS_CLIENT	=	client.c
+
+COMMON_OBJS	=	${COMMON_SRCS:%.c=${DIR_OBJS}%.o}
+
+OBJS_SERVER	=	${COMMON_OBJS} ${SRCS_SERVER:%.c=${DIR_OBJS}%.o}
+
+OBJS_CLIENT	=	${COMMON_OBJS} ${SRCS_CLIENT:%.c=${DIR_OBJS}%.o}
 
 # ---- Compilation ---- #
 
@@ -39,29 +45,31 @@ CFLAGS	=	-Wall -Wextra -Werror
 
 RM		=	rm -rf
 MKDIR	=	mkdir -p
-AR		=	ar rc
 
 # ********* RULES ******** #
 
-all				:	${NAME_SERVER}
+all				:	${NAME_SERVER} ${NAME_CLIENT}
 
 # ---- Variables Rules ---- #
 
-${NAME_SERVER}			:	${OBJS} Makefile ${LIBMLX} ${addprefix ${DIR_LIBFT}, ${LIBFT}} ${addprefix ${DIR_HEAD}, ${HEAD}}
-					${CC} ${CFLAGS} -o ${NAME} ${OBJS} -L${DIR_LIBFT} -lft
+${NAME_SERVER}	:	${OBJS_SERVER} Makefile ${addprefix ${DIR_LIBFT}, ${LIBFT}}
+					${CC} ${CFLAGS} -o ${NAME_SERVER} ${OBJS_SERVER} -L${DIR_LIBFT} -lft
+
+${NAME_CLIENT}	:	${OBJS_CLIENT} Makefile ${addprefix ${DIR_LIBFT}, ${LIBFT}}
+					${CC} ${CFLAGS} -o ${NAME_CLIENT} ${OBJS_CLIENT} -L${DIR_LIBFT} -lft
 
 ${addprefix ${DIR_LIBFT}, ${LIBFT}}	:
 					make ${LIBFT} -C ${DIR_LIBFT}
 
 # ---- Compiled Rules ---- #
 
-${OBJS}			:	| ${DIR_OBJS}
-
-${DIR_OBJS}%.o	:	${DIR_SRCS}%.c Makefile ${addprefix ${DIR_HEAD}, ${HEAD}}
-					${CC} ${CFLAGS} -I ${DIR_HEAD} -c $< -o $@
+${DIR_OBJS}%.o	:	${DIR_SRCS}%.c Makefile | ${DIR_OBJS}
+					${CC} ${CFLAGS} -MMD -I ${DIR_HEAD} -I ${DIR_LIBFT} -c $< -o $@
 
 ${DIR_OBJS}		:
 					${MKDIR} ${DIR_OBJS}
+
+-include ${DIR_OBJS}%.d
 
 # ---- Usual Commands ---- #
 					
@@ -72,7 +80,7 @@ clean			:
 					${RM} ${DIR_OBJS}
 
 fclean			:	clean
-					${RM} ${NAME_CLIENT} ${NAME_SERVER}
+					${RM} ${NAME_SERVER} ${NAME_CLIENT}
 
 fclean_all		:	fclean fclean_lib
 
