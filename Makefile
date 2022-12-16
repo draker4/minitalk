@@ -12,7 +12,7 @@ LIBFT		=	libft.a
 
 # ---- Directories ---- #
 
-DIR_OBJS	=	.objs/
+DIR_OBJS	=	.build/
 
 DIR_SRCS	=	srcs/
 
@@ -48,9 +48,11 @@ MKDIR	=	mkdir -p
 
 # ********* RULES ******** #
 
-all				:	${NAME_SERVER} ${NAME_CLIENT}
+all				:	${NAME_CLIENT} ${NAME_SERVER}
 
 # ---- Variables Rules ---- #
+
+${NAME}			:	all
 
 ${NAME_SERVER}	:	${OBJS_SERVER} Makefile ${addprefix ${DIR_LIBFT}, ${LIBFT}}
 					${CC} ${CFLAGS} -o ${NAME_SERVER} ${OBJS_SERVER} -L${DIR_LIBFT} -lft
@@ -84,4 +86,5 @@ fclean			:	clean
 
 fclean_all		:	fclean fclean_lib
 
-re				:	fclean all
+re				:	fclean
+					${MAKE} all
