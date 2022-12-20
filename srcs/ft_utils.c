@@ -6,7 +6,7 @@
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 18:07:30 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/14 18:41:42 by bperriol         ###   ########lyon.fr   */
+/*   Updated: 2022/12/15 14:27:22 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,28 @@ unsigned char	ft_reverse_char(unsigned char c)
 		c >>= 1;
 	}
 	return (reverse);
+}
+
+int	ft_initialize_sa(struct sigaction *sa, int flag)
+{
+	if (sigemptyset(&sa->sa_mask) == -1 \
+	|| sigaddset(&sa->sa_mask, SIGUSR1) == -1 \
+	|| sigaddset(&sa->sa_mask, SIGUSR2) == -1)
+		return (ft_msg_error(2));
+	sa->sa_flags = flag;
+	if (sigaction(SIGUSR1, sa, NULL) == -1 \
+	|| sigaction(SIGUSR2, sa, NULL) == -1)
+		return (ft_msg_error(5));
+	return (1);
+}
+
+void	ft_initialize_client(t_client *client, size_t len, char *str)
+{
+	client->str = str;
+	client->len = ft_reverse_len(len);
+	client->bit_32 = 32;
+	client->bit_8 = 8;
+	client->len_sent = 0;
+	client->c = 0;
+	client->nb_char = 0;
 }

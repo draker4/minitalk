@@ -6,7 +6,7 @@
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 16:45:49 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/14 18:00:10 by bperriol         ###   ########lyon.fr   */
+/*   Updated: 2022/12/16 11:28:31 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,7 @@ int	ft_msg_error(int msg)
 		ft_printf("Malloc function well secured!\n");
 	else if (msg == 5)
 		ft_printf("Sigaction function error!\n");
+	else if (msg == 6)
+		ft_printf("Please enter a message!\n");
 	exit(0);
 }
