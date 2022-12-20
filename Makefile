@@ -4,6 +4,8 @@
 
 # ---- Final Executable --- #
 
+NAME		=	minitalk
+
 NAME_SERVER	=	server
 
 NAME_CLIENT	=	client
