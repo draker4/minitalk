@@ -73,7 +73,7 @@ ${DIR_OBJS}%.o	:	${DIR_SRCS}%.c Makefile | ${DIR_OBJS}
 ${DIR_OBJS}		:
 					${MKDIR} ${DIR_OBJS}
 
--include ${DIR_OBJS}%.d
+-include ${DIR_OBJS}/*.d
 
 # ---- Usual Commands ---- #
 					

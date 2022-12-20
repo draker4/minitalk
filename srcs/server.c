@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/12 18:56:05 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/16 16:10:18 by bperriol         ###   ########lyon.fr   */
+/*   Created: 2022/12/20 15:28:53 by bperriol          #+#    #+#             */
+/*   Updated: 2022/12/20 15:28:53 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	ft_send_bit_ok(int client_id, int end)
 {
-	usleep(10);
+	usleep(20);
 	if (!end)
 	{
 		if (kill(client_id, SIGUSR1) == -1)
