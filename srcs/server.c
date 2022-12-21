@@ -6,7 +6,7 @@
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:28:53 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/21 12:38:44 by bperriol         ###   ########lyon.fr   */
+/*   Updated: 2022/12/21 15:01:42 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 static int	ft_send_bit_ok(int client_id, int end)
 {
-	usleep(20);
-	usleep(20);
 	if (!end)
 	{
 		if (kill(client_id, SIGUSR1) == -1)
@@ -29,7 +27,7 @@ static int	ft_send_bit_ok(int client_id, int end)
 	return (1);
 }
 
-static int	ft_calcul_len(int sig, t_signal	*signal, int client_id)
+static void	ft_calcul_len(int sig, t_signal	*signal)
 {
 	static int		size;
 
@@ -46,13 +44,12 @@ static int	ft_calcul_len(int sig, t_signal	*signal, int client_id)
 		signal->received_len = 1;
 		size = 0;
 	}
-	return (ft_send_bit_ok(client_id, 0));
 }
 
-static int	ft_create_string(int sig, t_signal *signal, int client_id)
+static void	ft_create_string(int sig, t_signal *signal)
 {
 	if (!signal->str)
-		signal->str = ft_calloc(signal->len + 1, sizeof(char));
+		signal->str = malloc((signal->len + 1) * sizeof(char));
 	if (!signal->str)
 		ft_msg_error(4);
 	if (signal->nb_char < (int)signal->len)
@@ -75,7 +72,6 @@ static int	ft_create_string(int sig, t_signal *signal, int client_id)
 			signal->received_string = 1;
 		}
 	}
-	return (ft_send_bit_ok(client_id, signal->received_string));
 }
 
 static void	handler(int sig, siginfo_t	*siginfo, void *context)
@@ -87,9 +83,8 @@ static void	handler(int sig, siginfo_t	*siginfo, void *context)
 		signal.client_id = siginfo->si_pid;
 	if (signal.received_len && (int)signal.len > 0)
 	{
-		if (!signal.received_string && \
-		!ft_create_string(sig, &signal, signal.client_id))
-			exit(0);
+		if (!signal.received_string)
+			ft_create_string(sig, &signal);
 		if (signal.received_string)
 		{
 			(signal.str)[signal.len] = '\0';
@@ -99,11 +94,12 @@ static void	handler(int sig, siginfo_t	*siginfo, void *context)
 			signal.len = 0;
 			free(signal.str);
 			signal.str = NULL;
+			ft_send_bit_ok(siginfo->si_pid, 1);
 		}
 	}
-	else if (!signal.received_len && \
-	!ft_calcul_len(sig, &signal, signal.client_id))
-		exit(0);
+	else if (!signal.received_len)
+		ft_calcul_len(sig, &signal);
+	ft_send_bit_ok(signal.client_id, 0);
 }
 
 int	main(void)
@@ -115,5 +111,5 @@ int	main(void)
 		return (0);
 	ft_printf("Process ID is : %d\n", getpid());
 	while (1)
-		pause();
+		;
 }
