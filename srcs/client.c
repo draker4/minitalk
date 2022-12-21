@@ -6,7 +6,7 @@
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 12:20:58 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/20 15:28:36 by bperriol         ###   ########lyon.fr   */
+/*   Updated: 2022/12/21 12:39:05 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ static int	ft_send_char(t_client *client, int pid)
 	{
 		if (client->c & 1)
 		{
-			usleep(20);
+			usleep(40);
 			if (kill(pid, SIGUSR1) == -1)
 				return (ft_msg_error(3));
 		}
 		else
 		{
-			usleep(20);
+			usleep(40);
 			if (kill(pid, SIGUSR2) == -1)
 				return (ft_msg_error(3));
 		}

@@ -6,7 +6,7 @@
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:28:53 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/20 15:28:53 by bperriol         ###   ########lyon.fr   */
+/*   Updated: 2022/12/21 12:38:44 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	ft_send_bit_ok(int client_id, int end)
 {
+	usleep(20);
 	usleep(20);
 	if (!end)
 	{
@@ -51,7 +52,7 @@ static int	ft_calcul_len(int sig, t_signal	*signal, int client_id)
 static int	ft_create_string(int sig, t_signal *signal, int client_id)
 {
 	if (!signal->str)
-		signal->str = malloc(sizeof(char) * (signal->len + 1));
+		signal->str = ft_calloc(signal->len + 1, sizeof(char));
 	if (!signal->str)
 		ft_msg_error(4);
 	if (signal->nb_char < (int)signal->len)
