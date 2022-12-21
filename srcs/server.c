@@ -6,25 +6,34 @@
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:28:53 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/21 15:01:42 by bperriol         ###   ########lyon.fr   */
+/*   Updated: 2022/12/21 17:15:19 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static int	ft_send_bit_ok(int client_id, int end)
+static void	ft_send_bit_ok(int client_id, int end, char *str)
 {
+	int	error;
+
+	error = 0;
 	if (!end)
 	{
 		if (kill(client_id, SIGUSR1) == -1)
-			return (ft_msg_error(3));
+			error = 1;
 	}
 	else
 	{
 		if (kill(client_id, SIGUSR2) == -1)
-			return (ft_msg_error(3));
+			error = 1;
 	}
-	return (1);
+	if (error)
+	{
+		ft_printf("Kill function error!\n");
+		if (str)
+			free(str);
+		exit (0);
+	}
 }
 
 static void	ft_calcul_len(int sig, t_signal	*signal)
@@ -94,12 +103,12 @@ static void	handler(int sig, siginfo_t	*siginfo, void *context)
 			signal.len = 0;
 			free(signal.str);
 			signal.str = NULL;
-			ft_send_bit_ok(siginfo->si_pid, 1);
+			ft_send_bit_ok(signal.client_id, 1, NULL);
 		}
 	}
 	else if (!signal.received_len)
 		ft_calcul_len(sig, &signal);
-	ft_send_bit_ok(signal.client_id, 0);
+	ft_send_bit_ok(signal.client_id, 0, signal.str);
 }
 
 int	main(void)

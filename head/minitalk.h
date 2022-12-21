@@ -6,7 +6,7 @@
 /*   By: bperriol <bperriol@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:56:56 by bperriol          #+#    #+#             */
-/*   Updated: 2022/12/16 14:03:50 by bperriol         ###   ########lyon.fr   */
+/*   Updated: 2022/12/21 17:15:05 by bperriol         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 typedef struct s_signal
 {
 	int				received_len;
-	int				client_id;
 	int				received_string;
+	int				client_id;
 	int				nb_char;
 	int				nb_bit_char;
 	unsigned char	c;
